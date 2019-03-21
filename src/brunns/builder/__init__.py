@@ -1,3 +1,3 @@
 # encoding=utf-8
 
-from .base import Builder, a_string, a_boolean, an_integer, one_of, method  # noqa: F401
+from .base import Builder, a_boolean, a_string, an_integer, method, one_of  # noqa: F401

@@ -2,9 +2,8 @@
 import logging
 import string
 
-from furl import furl
-
 from brunns.builder import Builder, a_string, an_integer, one_of
+from furl import furl
 
 logger = logging.getLogger(__name__)
 

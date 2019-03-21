@@ -2,7 +2,6 @@
 import logging
 
 import pendulum
-
 from brunns.builder import Builder, an_integer
 
 logger = logging.getLogger(__name__)

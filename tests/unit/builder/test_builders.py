@@ -5,16 +5,15 @@ from email.mime.text import MIMEText
 from pathlib import Path
 
 import pytest
-from brunns.matchers.object import has_identical_properties_to
-from brunns.matchers.smtp import email_with
-from furl import furl
-from hamcrest import has_properties, assert_that, instance_of, not_
-
-from brunns.builder import Builder, a_string, a_boolean, an_integer, method
+from brunns.builder import Builder, a_boolean, a_string, an_integer, method
 from brunns.builder.datetime import DateBuilder
 from brunns.builder.email import EmailMessageBuilder
 from brunns.builder.file import PathBuilder
 from brunns.builder.internet import UrlBuilder
+from brunns.matchers.object import has_identical_properties_to
+from brunns.matchers.smtp import email_with
+from furl import furl
+from hamcrest import assert_that, has_properties, instance_of, not_
 
 logger = logging.getLogger(__name__)
 
