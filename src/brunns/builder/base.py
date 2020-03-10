@@ -70,6 +70,12 @@ class BuilderMeta(type):
         def __getitem__(self, item):
             return self.build()[item]
 
+        def __repr__(self):
+            return repr(self.build())
+
+        def __str__(self):
+            return str(self.build())
+
         def build(self):
             state = vars(self)
             args = state.pop("args", [])
@@ -83,6 +89,8 @@ class BuilderMeta(type):
         setattr(result, __init__.__name__, __init__)
         setattr(result, __getattr__.__name__, __getattr__)
         setattr(result, __getitem__.__name__, __getitem__)
+        setattr(result, __repr__.__name__, __repr__)
+        setattr(result, __str__.__name__, __str__)
         setattr(result, build.__name__, build)
 
         return result

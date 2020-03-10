@@ -248,6 +248,12 @@ def test_builder_as_object_proxy():
         def __getitem__(self, item):
             return self.b
 
+        def __repr__(self):
+            return "test repr"
+
+        def __str__(self):
+            return "test str"
+
     class SomeClassBuilder(Builder):
         target = SomeClass
         a = an_integer
@@ -261,3 +267,5 @@ def test_builder_as_object_proxy():
     assert_that(builder, instance_of(SomeClassBuilder))
     assert builder.mult() == 6
     assert builder["whatever"] == 3
+    assert repr(builder) == "test repr"
+    assert str(builder) == "test str"
