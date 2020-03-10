@@ -55,12 +55,12 @@ class BuilderMeta(type):
             )
 
         def __getattr__(self, item):
-            """Dynamic 'with_x' methods."""
-            name = item.partition("with_")[2]
-            if name:
+            """Dynamic 'with_x' and 'and_x' methods."""
+            attr_name = item.partition("with_")[2] or item.partition("and_")[2]
+            if attr_name:
 
                 def with_(value):
-                    setattr(self, name, value)
+                    setattr(self, attr_name, value)
                     return self
 
                 return with_

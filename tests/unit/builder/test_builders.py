@@ -87,6 +87,28 @@ def test_setting_values_by_with_method():
     assert_that(actual, has_properties(a=99))
 
 
+def test_setting_values_by_and_method():
+    # Given
+    class SomeClass:
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+    class SomeClassBuilder(Builder):
+        target = SomeClass
+        a = 4
+        b = a_string
+
+    builder = SomeClassBuilder()
+
+    # When
+    actual = builder.with_a(99).and_b("hello").build()
+
+    # Then
+    assert_that(actual, instance_of(SomeClass))
+    assert_that(actual, has_properties(a=99, b="hello"))
+
+
 def test_setting_values_by_kwargs():
     # Given
     class SomeClass:
