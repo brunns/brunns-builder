@@ -235,7 +235,7 @@ def test_neither_target_nor_build():
         BrokenBuilder().build()
 
 
-def test_builder_as_object_proxy():
+def test_builder_as_object_proxy():  # noqa: C901
     # Given
     class SomeClass:
         def __init__(self, a, b):
