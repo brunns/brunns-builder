@@ -4,7 +4,7 @@ default: help
 
 .PHONY: test
 test: ## Run tests
-	tox -e py35,py38
+	tox -e py36,py38
 
 .PHONY: coverage
 coverage: ## Test coverage report
@@ -43,7 +43,7 @@ precommit: test lint coverage ## Pre-commit targets
 
 .PHONY: recreate
 recreate: ## Recreate tox environments
-	tox --recreate --notest -e py35,py36,py37,py38,format,flake8,bandit,piprot,pylint
+	tox --recreate --notest -e py36,py37,py38,format,flake8,bandit,piprot,pylint
 
 .PHONY: clean
 clean: ## Clean generated files
