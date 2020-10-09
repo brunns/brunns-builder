@@ -11,7 +11,7 @@ coverage: ## Test coverage report
 	tox -e coverage
 
 .PHONY: lint
-lint: check-format flake8 bandit ## Lint code
+lint: check-format flake8 bandit safety ## Lint code
 
 .PHONY: flake8
 flake8:
@@ -20,6 +20,10 @@ flake8:
 .PHONY: bandit
 bandit:
 	tox -e bandit
+
+.PHONY: safety
+bandit:
+	tox -e safety
 
 .PHONY: pylint
 pylint:
