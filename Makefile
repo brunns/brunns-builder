@@ -22,7 +22,7 @@ bandit:
 	tox -e bandit
 
 .PHONY: safety
-bandit:
+safety:
 	tox -e safety
 
 .PHONY: pylint
