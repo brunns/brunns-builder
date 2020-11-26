@@ -48,5 +48,5 @@ setup(
         "Topic :: Software Development :: Testing",
     ],
     python_requires=">=3.6",
-    install_requires=["furl~=2.0"],
+    install_requires=["furl~=2.0", "more_itertools>=2.0,<9.0"],
 )

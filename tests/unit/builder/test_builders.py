@@ -6,9 +6,18 @@ from pathlib import Path
 
 import pytest
 from brunns.matchers.object import has_identical_properties_to
-from brunns.matchers.smtp import email_with
+from brunns.matchers.url import is_url
 from furl import furl
-from hamcrest import assert_that, has_properties, instance_of, not_
+from hamcrest import (
+    all_of,
+    assert_that,
+    contains_string,
+    has_entries,
+    has_properties,
+    has_string,
+    instance_of,
+    not_,
+)
 
 from brunns.builder import Builder, a_boolean, a_string, an_integer, method
 from brunns.builder.datetime import DateBuilder
@@ -194,6 +203,65 @@ def test_url_builder():
     assert_that(url1, not_(has_identical_properties_to(url4)))
 
 
+def test_email_builder():
+    # Given
+    builder = (
+        EmailMessageBuilder()
+        .with_body_text("foo bar baz")
+        .and_to("banana@example.com", "banana")
+        .and_from("simon@brunni.ng", "Simon Brunning (he/him)")
+        .and_subject("I like chips")
+    )
+
+    # When
+    email_message = builder.build()
+
+    # Then
+    assert_that(email_message, instance_of(MIMEText))
+    assert_that(
+        email_message,
+        all_of(
+            has_string(contains_string("bar")),
+            has_entries(
+                {
+                    "To": "banana <banana@example.com>",
+                    "From": '"Simon Brunning (he/him)" <simon@brunni.ng>',
+                    "subject": "I like chips",
+                }
+            ),
+        ),
+    )
+
+
+def test_email_builder_with_multiple_recipients():
+    # Given
+    builder = (
+        EmailMessageBuilder()
+        .with_to(
+            ["banana@example.com", "banana"], ("fred@example.com", "Fred"), ["swed@somewhere.net"]
+        )
+        .plus_to("eric@example.com", "Eric")
+        .plus_to("ernie@example.com")
+    )
+
+    # When
+    email_message = builder.build()
+
+    # Then
+    assert_that(
+        email_message,
+        has_entries(
+            {
+                "To": "banana <banana@example.com>, "
+                "Fred <fred@example.com>, "
+                "swed@somewhere.net, "
+                "Eric <eric@example.com>, "
+                "ernie@example.com"
+            }
+        ),
+    )
+
+
 def test_date_builder():
     # Given
     builder = DateBuilder()
@@ -218,14 +286,14 @@ def test_path_builder():
 
 def test_nested_builders():
     # Given
-    builder = EmailMessageBuilder(subject="Chips are nice")
+    builder = UrlBuilder(fragment="123")
 
     # When
-    actual = builder.with_to_name("simon").build()
+    actual = builder.with_port(456).build()
 
     # Then
-    assert_that(actual, instance_of(MIMEText))
-    assert_that(actual.as_string(), email_with(to_name="simon", subject="Chips are nice"))
+    assert_that(actual, instance_of(furl))
+    assert_that(actual, is_url().with_fragment("123"))
 
 
 def test_additional_methods():
