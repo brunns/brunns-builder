@@ -21,7 +21,7 @@ except IOError:
 setup(
     name="brunns-builder",
     zip_safe=False,
-    version="0.5.0",
+    version="0.6.0",
     description="Test object builders.",
     long_description=long_description,
     long_description_content_type="text/markdown",
