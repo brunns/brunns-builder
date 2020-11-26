@@ -209,6 +209,8 @@ def test_email_builder():
         EmailMessageBuilder()
         .with_body_text("foo bar baz")
         .and_to("banana@example.com", "banana")
+        .and_cc("apple@example.com", "apple")
+        .and_bcc("orange@example.com", "orange")
         .and_from("simon@brunni.ng", "Simon Brunning (he/him)")
         .and_subject("I like chips")
     )
@@ -225,6 +227,8 @@ def test_email_builder():
             has_entries(
                 {
                     "To": "banana <banana@example.com>",
+                    "CC": "apple <apple@example.com>",
+                    "BCC": "orange <orange@example.com>",
                     "From": '"Simon Brunning (he/him)" <simon@brunni.ng>',
                     "subject": "I like chips",
                 }
@@ -242,6 +246,10 @@ def test_email_builder_with_multiple_recipients():
         )
         .plus_to("eric@example.com", "Eric")
         .plus_to("ernie@example.com")
+        .and_cc(("orange@example.com", "orange"))
+        .plus_cc("apple@example.com")
+        .and_bcc(("plum@example.com", "plum"))
+        .plus_bcc("peach@example.com")
     )
 
     # When
@@ -256,7 +264,9 @@ def test_email_builder_with_multiple_recipients():
                 "Fred <fred@example.com>, "
                 "swed@somewhere.net, "
                 "Eric <eric@example.com>, "
-                "ernie@example.com"
+                "ernie@example.com",
+                "CC": "orange <orange@example.com>, apple@example.com",
+                "BCC": "plum <plum@example.com>, peach@example.com",
             }
         ),
     )
