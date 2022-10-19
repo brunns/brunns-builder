@@ -4,14 +4,14 @@ default: help
 
 .PHONY: test
 test: ## Run tests
-	tox -e py36,py39
+	tox -e py37,py311
 
 .PHONY: coverage
 coverage: ## Test coverage report
 	tox -e coverage
 
 .PHONY: lint
-lint: check-format flake8 bandit safety ## Lint code
+lint: check-format flake8 bandit safety refurb ## Lint code
 
 .PHONY: flake8
 flake8:
@@ -33,6 +33,10 @@ pylint:
 check-format:
 	tox -e check-format
 
+.PHONY: refurb
+refurb:
+	tox -e refurb
+
 .PHONY: format
 format: ## Format code
 	tox -e format
@@ -46,8 +50,9 @@ precommit: test lint coverage ## Pre-commit targets
 	@ python -m this
 
 .PHONY: recreate
-recreate: ## Recreate tox environments
-	tox --recreate --notest -e py36,py37,py38,format,flake8,bandit,piprot,pylint
+recreate: clean  ## Recreate tox environments
+	tox --recreate --notest -p -s
+	tox --recreate --notest -e coverage,format,check-format,flake8,pylint,bandit,safety,piprot,refurb -p
 
 .PHONY: clean
 clean: ## Clean generated files
@@ -59,11 +64,11 @@ clean: ## Clean generated files
 
 .PHONY: repl
 repl: ## Python REPL
-	tox -e py39 -- python
+	tox -e py311 -- python
 
 .PHONY: outdated
 outdated: ## List outdated dependancies
-	tox -e py39 -- pip list -o
+	tox -e py311 -- pip list -o
 
 .PHONY: help
 help: ## Show this help

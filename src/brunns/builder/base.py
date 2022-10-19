@@ -14,7 +14,7 @@ def a_string(length=10, characters=string.ascii_letters + string.digits):
 
 
 def an_integer(a=None, b=None):
-    return random.randint(a if a else 0, b if b else sys.maxsize)  # nosec
+    return random.randint(a or 0, b or sys.maxsize)  # nosec
 
 
 def a_boolean():
@@ -64,8 +64,7 @@ class BuilderMeta(type):
                     return self
 
                 return with_
-            else:
-                return getattr(self.build(), item)
+            return getattr(self.build(), item)
 
         def __getitem__(self, item):
             return self.build()[item]

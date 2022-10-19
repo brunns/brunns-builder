@@ -1,0 +1,121 @@
+name: Continuous Integration
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 15 * * THU'  # Every Thursday afternoon
+
+jobs:
+  test:
+    name: 'Test'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python: ['3.10']
+        os: ['ubuntu-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Run Tests
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py
+        
+  test-py-versions:
+    name: 'Test Python versions'
+    needs: test
+    runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        python: ['3.9', '3.8', '3.7', 'pypy-3.7']
+        os: ['ubuntu-latest']
+        experimental: [false]
+        include:
+          - python: '3.11.0-alpha - 3.11.0'
+            experimental: true
+            os: 'ubuntu-latest'
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Run Tests
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py
+        
+  test-oses:
+    name: 'Test OSes'
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python: ['3.10']
+        os: ['windows-latest', 'macos-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Run Tests
+        # Run tox using the version of Python in `PATH`
+        run: tox -e py
+
+  coverage:
+    name: 'Check coverage'
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python: ['3.10']
+        os: ['ubuntu-latest']
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Check coverage
+        run: tox -e coverage
+
+  lint-etc:
+    name: 'Linting'
+    needs: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        python: [ '3.10' ]
+        os: [ 'ubuntu-latest' ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python ${{ matrix.python }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Tox and any other packages
+        run: pip install tox
+      - name: Check format
+        run: tox -e check-format
+      - name: Lint
+        run: tox -e flake8 refurb
+      - name: Security checks
+        run: tox -e bandit,safety

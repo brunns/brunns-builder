@@ -42,8 +42,7 @@ class EmailMessageBuilder(Builder):
     def with_to(self, *args):
         if args and isinstance(args[0], str):
             return self.with_to_([MimeEmailAddress(args[0], nth(args, 1, None))])
-        else:
-            return self.with_to_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
+        return self.with_to_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
 
     @method
     def and_to(self, *args):
@@ -58,8 +57,7 @@ class EmailMessageBuilder(Builder):
     def with_cc(self, *args):
         if args and isinstance(args[0], str):
             return self.with_cc_([MimeEmailAddress(args[0], nth(args, 1, None))])
-        else:
-            return self.with_cc_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
+        return self.with_cc_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
 
     @method
     def and_cc(self, *args):
@@ -74,8 +72,7 @@ class EmailMessageBuilder(Builder):
     def with_bcc(self, *args):
         if args and isinstance(args[0], str):
             return self.with_bcc_([MimeEmailAddress(args[0], nth(args, 1, None))])
-        else:
-            return self.with_bcc_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
+        return self.with_bcc_([MimeEmailAddress(t[0], nth(t, 1, None)) for t in args])
 
     @method
     def and_bcc(self, *args):
