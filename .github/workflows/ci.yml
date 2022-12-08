@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: pip install tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: pip install tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -71,7 +71,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: pip install tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -92,7 +92,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: pip install tox~=3.0
       - name: Check coverage
         run: tox -e coverage
 
@@ -112,7 +112,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox
+        run: pip install tox~=3.0
       - name: Check format
         run: tox -e check-format
       - name: Lint
