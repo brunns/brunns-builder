@@ -21,10 +21,6 @@ flake8:
 bandit:
 	tox -e bandit
 
-.PHONY: safety
-safety:
-	tox -e safety
-
 .PHONY: pylint
 pylint:
 	tox -e pylint
