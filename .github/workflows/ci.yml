@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ['3.10']
+        python: ['3.13']
         os: ['ubuntu-latest']
 
     steps:
@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox~=3.0
+        run: pip install setuptools tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -34,11 +34,11 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        python: ['3.9', '3.8', '3.7', 'pypy-3.7']
+        python: ['3.12', '3.11', '3.10', '3.9', 'pypy-3.10']
         os: ['ubuntu-latest']
         experimental: [false]
         include:
-          - python: '3.11.0-alpha - 3.11.0'
+          - python: '3.14.0-alpha - 3.14.0'
             experimental: true
             os: 'ubuntu-latest'
       fail-fast: false
@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox~=3.0
+        run: pip install setuptools tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -61,7 +61,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ['3.10']
+        python: ['3.13']
         os: ['windows-latest', 'macos-latest']
 
     steps:
@@ -71,7 +71,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox~=3.0
+        run: pip install setuptools tox~=3.0
       - name: Run Tests
         # Run tox using the version of Python in `PATH`
         run: tox -e py
@@ -82,7 +82,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: ['3.10']
+        python: ['3.13']
         os: ['ubuntu-latest']
 
     steps:
@@ -92,7 +92,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox~=3.0
+        run: pip install setuptools tox~=3.0
       - name: Check coverage
         run: tox -e coverage
 
@@ -102,7 +102,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        python: [ '3.10' ]
+        python: [ '3.13' ]
         os: [ 'ubuntu-latest' ]
 
     steps:
@@ -112,10 +112,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install Tox and any other packages
-        run: pip install tox~=3.0
+        run: pip install setuptools tox~=3.0
       - name: Check format
         run: tox -e check-format
-      - name: Lint
-        run: tox -e flake8 refurb
-      - name: Security checks
-        run: tox -e bandit

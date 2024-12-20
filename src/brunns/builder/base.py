@@ -1,4 +1,3 @@
-# encoding=utf-8
 import logging
 import random
 import string
@@ -18,7 +17,7 @@ def an_integer(a=None, b=None):
 
 
 def a_boolean():
-    return one_of(True, False)
+    return one_of(True, False)  # noqa: FBT003
 
 
 def one_of(*args):
@@ -26,33 +25,29 @@ def one_of(*args):
 
 
 class BuilderMeta(type):
-    def __new__(metacls, name, bases, namespace, **kwds):  # noqa: C901
+    def __new__(cls, name, bases, namespace):  # noqa: C901
         target = namespace.pop("target", None)
         args = namespace.pop("args", [])
 
         def __init__(self, **kwargs):
             # Defaults from factories (plus method overrides.
-            for name, value in namespace.items():
-                if name in {"build"} or getattr(
-                    value, "is_method", False
-                ):  # It's an overridable base method.
+            for key, value in namespace.items():
+                if key in {"build"} or getattr(value, "is_method", False):  # It's an overridable base method.
                     m = MethodType(value, self)
-                    setattr(self, name, m)
+                    setattr(self, key, m)
                 elif isclass(value) and issubclass(value, Builder):  # It's a nested builder.
-                    setattr(self, name, value().build())
-                elif not name.startswith("__"):  # It's a field value or factory.
+                    setattr(self, key, value().build())
+                elif not key.startswith("__"):  # It's a field value or factory.
                     if callable(value):
-                        setattr(self, name, value())
+                        setattr(self, key, value())
                     else:
-                        setattr(self, name, value)
+                        setattr(self, key, value)
 
             # Values from keyword arguments.
-            for name, value in kwargs.items():
-                setattr(self, name, value)
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
-            self.args = (
-                args() if callable(args) else [arg() if callable(arg) else arg for arg in args]
-            )
+            self.args = args() if callable(args) else [arg() if callable(arg) else arg for arg in args]
 
         def __getattr__(self, item):
             """Dynamic 'with_x' and 'and_x' methods."""
@@ -80,10 +75,10 @@ class BuilderMeta(type):
             args = state.pop("args", [])
             if callable(target):
                 return target(*args, **state)
-            else:
-                raise ValueError("Needs a target (i.e. a callable instance factory).")
+            msg = "Needs a target (i.e. a callable instance factory)."
+            raise ValueError(msg)
 
-        result = type.__new__(metacls, name, bases, {})
+        result = type.__new__(cls, name, bases, {})
 
         setattr(result, __init__.__name__, __init__)
         setattr(result, __getattr__.__name__, __getattr__)
@@ -97,8 +92,6 @@ class BuilderMeta(type):
 
 class Builder(metaclass=BuilderMeta):
     """TODO"""
-
-    pass
 
 
 def method(func):

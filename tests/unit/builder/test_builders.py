@@ -1,4 +1,3 @@
-# encoding=utf-8
 import logging
 from datetime import date
 from email.mime.text import MIMEText
@@ -7,7 +6,6 @@ from pathlib import Path
 import pytest
 from brunns.matchers.object import has_identical_properties_to
 from brunns.matchers.url import is_url
-from furl import furl
 from hamcrest import (
     all_of,
     assert_that,
@@ -18,6 +16,7 @@ from hamcrest import (
     instance_of,
     not_,
 )
+from yarl import URL
 
 from brunns.builder import Builder, a_boolean, a_string, an_integer, method
 from brunns.builder.datetime import DateBuilder
@@ -197,7 +196,7 @@ def test_url_builder():
     url4 = UrlBuilder().build()
 
     # Then
-    assert_that(url1, instance_of(furl))
+    assert_that(url1, instance_of(URL))
     assert_that(url1, has_identical_properties_to(url2))
     assert_that(url1, not_(has_identical_properties_to(url3)))
     assert_that(url1, not_(has_identical_properties_to(url4)))
@@ -241,9 +240,7 @@ def test_email_builder_with_multiple_recipients():
     # Given
     builder = (
         EmailMessageBuilder()
-        .with_to(
-            ["banana@example.com", "banana"], ("fred@example.com", "Fred"), ["swed@somewhere.net"]
-        )
+        .with_to(["banana@example.com", "banana"], ("fred@example.com", "Fred"), ["swed@somewhere.net"])
         .plus_to("eric@example.com", "Eric")
         .plus_to("ernie@example.com")
         .and_cc(("orange@example.com", "orange"))
@@ -302,7 +299,7 @@ def test_nested_builders():
     actual = builder.with_port(456).build()
 
     # Then
-    assert_that(actual, instance_of(furl))
+    assert_that(actual, instance_of(URL))
     assert_that(actual, is_url().with_fragment("123"))
 
 
@@ -336,7 +333,7 @@ def test_neither_target_nor_build():
         BrokenBuilder().build()
 
 
-def test_builder_as_object_proxy():  # noqa: C901
+def test_builder_as_object_proxy():
     # Given
     class SomeClass:
         def __init__(self, a, b):

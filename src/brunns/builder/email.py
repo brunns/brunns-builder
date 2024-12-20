@@ -1,4 +1,3 @@
-# encoding=utf-8
 import email
 import logging
 from email.mime.text import MIMEText
@@ -17,10 +16,12 @@ class EmailAddressBuilder(Builder):
     domain = DomainBuilder
 
     def build(self):
-        return "{0}@{1}".format(self.username, self.domain)
+        return f"{self.username}@{self.domain}"
 
 
-MimeEmailAddress = NamedTuple("MimeEmailAddress", [("address", str), ("name", Optional[str])])
+class MimeEmailAddress(NamedTuple):
+    address: str
+    name: Optional[str]
 
 
 class MimeEmailAddressBuilder(Builder):
