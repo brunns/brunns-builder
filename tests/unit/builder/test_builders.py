@@ -296,11 +296,11 @@ def test_nested_builders():
     builder = UrlBuilder(fragment="123")
 
     # When
-    actual = builder.with_port(456).build()
+    actual = builder.with_port(456).and_path("/foo/bar").build()
 
     # Then
     assert_that(actual, instance_of(URL))
-    assert_that(actual, is_url().with_fragment("123"))
+    assert_that(actual, is_url().with_fragment("123").and_path("/foo/bar"))
 
 
 def test_additional_methods():

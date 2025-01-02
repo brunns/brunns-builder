@@ -24,7 +24,7 @@ class UrlBuilder(Builder):
     password = a_string
     host = DomainBuilder
     port = lambda: an_integer(1, 65535)
-    path = lambda: [a_string(), a_string()]
+    path = lambda: f"/{a_string()}/{a_string()}"
     query = lambda: {a_string(): a_string(), a_string(): a_string()}
     fragment = a_string
 
@@ -35,7 +35,7 @@ class UrlBuilder(Builder):
             password=self.password,
             host=self.host,
             port=self.port,
-            path=f"/{'/'.join(self.path)}",
+            path=self.path,
             query=self.query,
             fragment=self.fragment,
         )
