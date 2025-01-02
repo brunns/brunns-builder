@@ -21,7 +21,7 @@ except OSError:
 setup(
     name="brunns-builder",
     zip_safe=False,
-    version="1.1.0",
+    version="1.1.1",
     description="Test object builders.",
     long_description=long_description,
     long_description_content_type="text/markdown",
